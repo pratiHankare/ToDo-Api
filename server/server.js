@@ -7,7 +7,7 @@ mongoose.connect('mongodb://localhost:27017/TodoApp');
 
 //creating a model .model helps in keeping the collections more organised
 /*this basically defines the What collection shuld contain(col) along with col defination(like what kind of col shuld accept input as)*/
-var Todo=mongoose.model('Todo',{
+/*var Todo=mongoose.model('Todo',{
   text:{
     type:String,
     required:true,
@@ -22,7 +22,7 @@ var Todo=mongoose.model('Todo',{
     type:Number,
     default:null
   }
-});
+});*/
 /*
 //creating the instance of above model:Todo
 var newTodo=new Todo({
@@ -35,7 +35,7 @@ newTodo.save().then(
   (e)=>{console.log('Unable to save todo')}
 );
 */
-/*challenge*/
+/*challenge
 var secondTodo=new Todo({
   text:'have tea',
 });
@@ -43,4 +43,24 @@ var secondTodo=new Todo({
 secondTodo.save().then(
   (doc)=>{ console.log('saved todo',doc);},
   (e)=>{ console.log('Unable to save todo',e); }
+);*/
+
+/*Challenge -> create a user model that accepts email nd store in DB*/
+/*Model*/
+var users=mongoose.model('Users',{
+  email:{
+    type:String,
+    minlength:1,
+    required:true,
+    trim:true
+  }
+});
+/*create a instance to insert te input*/
+var user=new users({
+  email:' prati@gmail.com      '
+});
+/*saving the data inside the db*/
+user.save().then(
+  (doc)=>{console.log(JSON.stringify(doc,undefined,2));},
+  (e)=>{console.log('unable to save',e)}
 );
