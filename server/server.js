@@ -9,13 +9,18 @@ mongoose.connect('mongodb://localhost:27017/TodoApp');
 /*this basically defines the What collection shuld contain(col) along with col defination(like what kind of col shuld accept input as)*/
 var Todo=mongoose.model('Todo',{
   text:{
-    type:String
+    type:String,
+    required:true,
+    trim:true,
+    minlength:1
   },
   completed:{
-    type:Boolean
+    type:Boolean,
+    default:false
   },
   completedAt:{
-    type:Number
+    type:Number,
+    default:null
   }
 });
 /*
@@ -32,12 +37,10 @@ newTodo.save().then(
 */
 /*challenge*/
 var secondTodo=new Todo({
-  text:'finish section 7 today',
-  completed:0,
-  completedAt:2002
+  text:'have tea',
 });
 
 secondTodo.save().then(
   (doc)=>{ console.log('saved todo',doc);},
-  (e)=>{ console.log('Unable to save todo'); }
+  (e)=>{ console.log('Unable to save todo',e); }
 );
