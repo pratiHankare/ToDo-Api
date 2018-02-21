@@ -29,7 +29,16 @@ app.post('/todos',(req,res)=>{
   );
 });
 /************************************************************/
-
+//route to fetch todos if present in DB using GET
+app.get('/todos',(req,res)=>{
+  //fetching whole data from DB
+  Todo.find().then(
+    (todos)=>{ res.send({todos});
+  },(e)=>{
+    res.status(400).send(e);
+  });
+});
+/************************************************************/
 //inorder to run the app on Local it has listen by server at some port
 app.listen(3000,()=>{
   console.log('Started on Port 3000.');
