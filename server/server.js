@@ -14,7 +14,7 @@ var app = express();
 
 //intialising middleware->using middleware from body-parser
 app.use(bodyParser.json());
-
+/*********************************************************/
 //setting up route with post
 app.post('/todos',(req,res)=>{
   //console.log(req.body);
@@ -28,7 +28,13 @@ app.post('/todos',(req,res)=>{
     (e)=>{ res.status(400).send(e);}
   );
 });
+/************************************************************/
+
 //inorder to run the app on Local it has listen by server at some port
 app.listen(3000,()=>{
   console.log('Started on Port 3000.');
 });
+
+
+/*exporting the app varible*/
+module.exports={app};
