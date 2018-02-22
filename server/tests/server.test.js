@@ -109,4 +109,20 @@ describe('GET /todos/:id',()=>{
       )
       .end(done);
   });
+
+  it('should return 404 if todo not found',(done)=>{
+      var hexId=new ObjectID().toHexString();
+      request(app)
+        .get(`/todos/${hexId}`)
+        .expect(404)
+        .end(done);
+  });
+  it('should return 404 for non-object ids',(done)=>{
+    request(app)
+      .get('/todos/123acb')
+      .expect(404)
+      .end(done);
+  });
+
+
 });

@@ -14,6 +14,9 @@ var {User}=require('./models/user');
 //intialising var that is going to store app
 var app = express();
 
+//while deploying to the heroku i need to set it env & local host
+const port= process.env.PORT || 3000;
+
 //intialising middleware->using middleware from body-parser
 app.use(bodyParser.json());
 /*********************************************************/
@@ -75,8 +78,8 @@ app.get('/todos/:id',(req,res)=>{
 
 /************************************************************/
 //inorder to run the app on Local it has listen by server at some port
-app.listen(3000,()=>{
-  console.log('Started on Port 3000.');
+app.listen(port,()=>{
+  console.log(`Started on port ${port}`);
 });
 
 
