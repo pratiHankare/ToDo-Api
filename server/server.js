@@ -65,7 +65,7 @@ app.get('/todos/:id',(req,res)=>{
        return res.status(404).send();
       }
       //console.log('Todo found are',todo)
-    res.send(todo);
+    res.send({todo});
     }).catch(
     //console.log(e);
     (e)=>{  res.status(400).send();
