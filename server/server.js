@@ -76,32 +76,23 @@ app.get('/todos/:id',(req,res)=>{
 });
 /****************************************************************************/
 //setting up the route for delete
-app.delete('/todos/:id',(req,res)=>{
-  /*get the id*/
-  var id=req.params.id;
-  /*validate the id*/
-    if(!ObjectID.isValid(id)){
+app.delete('/todos/:id', (req, res) => {
+  var id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Todo.findByIdAndRemove(id).then((todo) => {
+    if (!todo) {
       return res.status(404).send();
     }
-    /*if id is valid than remove the document*/
-    Todo.findByIdAndRemove(id).then(
-      /*if removed than 200*/
-      (doc)=>{
-        if(!doc){
-          /*if not than 404*/
-          return res.status(404).send();
-        }
-        res.send({doc});
-      }
-    ).catch(
-      //if id is not found than throw error
-      (e)=>{res.status(400).send();}
-    );
+
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  });
 });
-
-
-
-
 /************************************************************/
 //inorder to run the app on Local it has listen by server at some port
 app.listen(port,()=>{
