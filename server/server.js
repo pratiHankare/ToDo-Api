@@ -1,10 +1,11 @@
 
 /*Lib Imports*/
-var express=require('express');
-var bodyParser=require('body-parser');
+const _=require('lodash');
+const express=require('express');
+const bodyParser=require('body-parser');
 /*Local imports*/
 /*importing the db*/
-var {ObjectID}=require('mongodb');
+const {ObjectID}=require('mongodb');
 //including the connection string in the files
 var {mongoose} =require ('./db/mongoose');
 /*including custome files*/
@@ -92,6 +93,37 @@ app.delete('/todos/:id', (req, res) => {
   }).catch((e) => {
     res.status(400).send();
   });
+});
+/************************************************************/
+app.patch('/todos/:id',(req,res)=>{
+  //taking the id url and storing in the id using params
+  var id=req.params.id;
+  var body=_.pick(req.body,['text','completed']);
+  /*validating if id is valid or not */
+  if(!ObjectID.isValid(id)){
+    return res.status(404).send();
+  }
+/*checking if completed(type) == 1 and its value is TRUE if yes than allot the date to completedAt value */
+  if(_.isBoolean(body.completed) && body.completed)
+  {
+//setting up of value for completedAt
+    body.completedAt=new Date().getTime();
+  }else{
+    //else default values
+    body.completed=false;
+    body.completedAt=null;
+  }
+//update using findByAndUpdate then if todo is o/p check if its updated than returen the updated document
+//set -->updates and new ->default is false ->meaning give docu before the update
+//of updating failsa than catch
+  Todo.findByIdAndUpdate(id,{$set:body},{new:true}).then((todo)=>{
+    if(!todo){
+      return res.status(404).send();
+    }
+    res.send({todo});
+  }).catch((e)=>{
+    res.status(400).send();
+  })
 });
 /************************************************************/
 //inorder to run the app on Local it has listen by server at some port
