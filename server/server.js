@@ -143,7 +143,7 @@ app.post('/users', (req, res) => {
 });
 /************************************************************/
 //router for validation the user inorder to see if the user is the same
-app.get('/users/me',(req,res)=>{
+app.get('/users/me',authenticate,(req,res)=>{
   /*passed into middleware
   var token= req.header('x-auth');
    User.findByToken(token).then(
