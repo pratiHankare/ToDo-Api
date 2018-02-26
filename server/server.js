@@ -11,6 +11,7 @@ var {mongoose} =require ('./db/mongoose');
 /*including custome files*/
 var {Todo}=require('./models/todo');
 var {User}=require('./models/user');
+var {authenticate}=require('./middleware/authenticate');
 
 //intialising var that is going to store app
 var app = express();
@@ -124,6 +125,40 @@ app.patch('/todos/:id',(req,res)=>{
   }).catch((e)=>{
     res.status(400).send();
   })
+});
+/************************************************************/
+//route for user login
+// POST /users
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+  var user = new User(body);
+
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+});
+/************************************************************/
+//router for validation the user inorder to see if the user is the same
+app.get('/users/me',(req,res)=>{
+  /*passed into middleware
+  var token= req.header('x-auth');
+   User.findByToken(token).then(
+     (user)=>{
+       if(!user){
+///if the user didnt find
+          return Promise.reject();
+       }
+      // console.log(user);
+       res.send(user);
+     }).catch((e)=>{
+       //authentication is required
+     res.status(401).send();
+   });*/
+   res.send(req.user);
 });
 /************************************************************/
 //inorder to run the app on Local it has listen by server at some port
