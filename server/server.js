@@ -161,6 +161,27 @@ app.get('/users/me',authenticate,(req,res)=>{
    res.send(req.user);
 });
 /************************************************************/
+//POST /users/login(email,password)
+app.post('/users/login',(req,res)=>{
+  var body=_.pick(req.body,['email','password']);
+  //  res.send(body);
+  //verify if user email exists & verify (compare) with db <- done at user model
+  /*function call to check if emal & password exisits*/
+  User.findByCredentials(body.email,body.password).then((user)=>{
+    //go and write logic for model
+    //creating the new auth
+    return user.generateAuthToken().then((token)=>{
+      res.header('x-auth',token).send(user);
+    })
+  //  res.send(user);
+  }).catch((e)=>{
+    //console.log(e);
+        res.status(400).send();
+  });
+});
+
+/************************************************************/
+
 //inorder to run the app on Local it has listen by server at some port
 app.listen(port,()=>{
   console.log(`Started on port ${port}`);

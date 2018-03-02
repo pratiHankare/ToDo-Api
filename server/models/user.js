@@ -71,6 +71,30 @@ UserSchema.statics.findByToken=function(token){
     'tokens.access':'auth'
   });
 }
+
+//this model is to take email nd fnd if user exisis in the db
+UserSchema.statics.findByCredentials=function(email,password){
+  var User =this;
+  //to find if any user contains this email id
+  return User.findOne({email}).then((user)=>{
+        if(!user){
+          return Promise.reject();
+        }
+        return new Promise((resolve,reject)=>{
+          //use bcrypt.compare password and username
+
+          bcrypt.compare(password,user.password,(err,res)=>{
+            if(res){
+              resolve(user);
+            }else{
+              reject();
+            }
+          });///compare
+          });
+        });
+};
+
+
 //this is too hash the password before saving password to db
 UserSchema.pre('save',function(next){
   var user=this;
